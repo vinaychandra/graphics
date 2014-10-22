@@ -1,10 +1,9 @@
-Assignment 2 - CS 475
-=====================
+#CS475 - Graphics Project
 
-120050063 - 120050070
----------------------
 
-Vinay Chandra Dommeti
-Nikhil Sriram Dodda
+Graphics project of creating transformers
+
+* 120050063 - Vinay Chandra Dommeti
+* 120050070 - Nikhil Sriram Dodda
 
 Link to html file (It is present in the HTML folder)
