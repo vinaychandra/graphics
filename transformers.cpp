@@ -123,13 +123,40 @@ void renderGL()
 	glPushMatrix();
 		glRotatef(hood_rotate_x, 1.0,0,0);
 		glCallList(Hood);
+		glPushMatrix();
+			glColor3f(0.1,0.1,0.1);
+			GLUquadricObj *quadratic;
+			quadratic = gluNewQuadric();
+			glTranslatef(-0.28,0,0);
+			
+			glRotatef(90.0, 0.0, 1.0, 0.0);
+			glRotatef(wheel_turn,-1,0,0);
+			glRotatef(wheel_rotate,0,0,1);
+			gluCylinder(quadratic,0.1,0.1,0.1,32,32);
+			gluDisk(quadratic,0,0.1,32,32);
+
+		glPopMatrix();
+
+		glPushMatrix();
+			glColor3f(0.1,0.1,0.1);
+			quadratic = gluNewQuadric();
+			glTranslatef(0.28,0,0);
+			
+			glRotatef(90.0, 0.0, -1.0, 0.0);
+			glRotatef(wheel_turn,1,0,0);//
+			glRotatef(wheel_rotate,0,0,1);//
+			gluCylinder(quadratic,0.1,0.1,0.1,32,32);
+			gluDisk(quadratic,0,0.1,32,32);
+		glPopMatrix();
 	glPopMatrix();
 
 	glPushMatrix();
+		glTranslatef(0,0,windshield_move);
 		glTranslatef(0,-0.2,0);
 		glTranslatef(0,0.19,-0.3);
 		glRotatef(windshield_full_rotate, 1,0,0);
 		glTranslatef(0,-0.19,0.3);
+
 		glCallList(Windshield);
 		
 		glPushMatrix();
@@ -199,6 +226,7 @@ void renderGL()
 	glPopMatrix();
 
 	glPushMatrix();
+		glTranslatef(0,0,windshield_move);//we are moving both the windshield and backbone by the same amount
 		glCallList(BackBone);
 	glPopMatrix();
 
@@ -207,7 +235,7 @@ void renderGL()
 		glTranslatef(-0.11999,-0.5,0);
 		glRotatef(right_thigh_angle,0,0,1);
 		glTranslatef(0,0.5,0);
-		glCallList(Thigh);
+		//glCallList(Thigh);
 
 		glTranslatef(0,0,leg_translate);
 
@@ -216,17 +244,21 @@ void renderGL()
 		glTranslatef(0,0.7,0.4);
 		glCallList(Leg);
 		
+		glTranslatef(0,0,foot_move);	
 		glTranslatef(0,-1.1,-0.2);
 		glRotatef(right_foot_angle,-1,0,0);
 		glTranslatef(0,1.1,0.2);
 		glCallList(Foot);
 		
 		glPushMatrix();
+
 			glColor3f(0.1,0.1,0.1);
-			GLUquadricObj *quadratic;
+			//GLUquadricObj *quadratic;
 			quadratic = gluNewQuadric();
+			//glRotatef(wheel_turn,0,0,1);
 			glTranslatef(-0.15,-0.75,0);
 			glRotatef(90.0, 0.0, 1.0, 0.0);
+			glRotatef(wheel_rotate,0,0,1);
 			gluCylinder(quadratic,0.1,0.1,0.1,32,32);
 			gluDisk(quadratic,0,0.1,32,32);
 
@@ -238,7 +270,7 @@ void renderGL()
 		glTranslatef(0.11999,-0.5,0);
 		glRotatef(left_thigh_angle,0,0,-1);
 		glTranslatef(0,0.5,0);
-		glCallList(Thigh);
+		//glCallList(Thigh);
 		
 		glTranslatef(0,0,leg_translate);
 	
@@ -247,6 +279,7 @@ void renderGL()
 		glTranslatef(0,0.7,0.4);
 		glCallList(Leg);
 		
+		glTranslatef(0,0,foot_move);
 		glTranslatef(0,-1.1,-0.2);
 		glRotatef(left_foot_angle,-1,0,0);
 		glTranslatef(0,1.1,0.2);
@@ -257,6 +290,7 @@ void renderGL()
 			quadratic = gluNewQuadric();
 			glTranslatef(0.15,-0.75,0);
 			glRotatef(90.0, 0.0, -1.0, 0.0);
+			glRotatef(wheel_rotate,0,0,1);
 			gluCylinder(quadratic,0.1,0.1,0.1,32,32);
 			gluDisk(quadratic,0,0.1,32,32);
 

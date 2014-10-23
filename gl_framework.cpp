@@ -251,6 +251,19 @@
  			robot_mode = true;
  		}
 
+
+
+ 		else if (key == GLFW_KEY_Z && mods == GLFW_MOD_SHIFT)
+ 			wheel_turn += 1;
+		else if (key == GLFW_KEY_Z)
+ 			wheel_turn -= 1;
+ 		
+
+ 		else if (key == GLFW_KEY_X && mods == GLFW_MOD_SHIFT)
+ 			wheel_rotate += 1;
+ 		else if (key == GLFW_KEY_X)
+ 			wheel_rotate -= 1;
+ 		
  	}	
 
  	void p()

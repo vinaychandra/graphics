@@ -98,4 +98,12 @@ extern double right_foot_angle;
 extern bool car_mode;
 extern bool robot_mode;
 
+extern double windshield_move;
+
+extern double foot_move;
+
+extern double wheel_turn;
+
+extern double wheel_rotate;
+
 #endif
