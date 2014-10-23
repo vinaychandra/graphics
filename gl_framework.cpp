@@ -27,37 +27,37 @@
 
  	void p();
 
-//! Initialize GL State
+  //! Initialize GL State
  	void initGL(void)
  	{
 		//Set framebuffer clear color
 		//	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
-		
+
 		//Set depth buffer furthest depth
 		glClearDepth(1.0);
-		
+
 		//Set depth test to less-than
 		glDepthFunc(GL_LESS);
-		
+
 		//Enable depth testing
-		//  glEnable(GL_DEPTH_TEST); 
+		//  glEnable(GL_DEPTH_TEST);
 		//Enable Gourard shading
 		//	glEnable(GL_CULL_FACE);
-		
+
 		glEnable(GL_DEPTH_TEST);
 		glShadeModel(GL_SMOOTH);
 		glMatrixMode(GL_PROJECTION);
 		glOrtho(-1, 1, -1, 1, -1, 1);
  	}
 
-//!GLFW Error Callback
+  //!GLFW Error Callback
  	void error_callback(int error, const char* description)
  	{
  		std::cerr<<description<<std::endl;
  	}
 
-//!GLFW framebuffer resize callback
+  //!GLFW framebuffer resize callback
  	void framebuffer_size_callback(GLFWwindow* window, int width, int height)
  	{
  		if	( height == 0 ) height = 1;
@@ -85,10 +85,10 @@
  		win_height = height;
  	}
 
-//!GLFW keyboard callback
+  //!GLFW keyboard callback
  	void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
  	{
-//!Close the window if the ESC key was pressed
+     //!Close the window if the ESC key was pressed
  		if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
  			glfwSetWindowShouldClose(window, GL_TRUE);
  		else if (key == GLFW_KEY_RIGHT)
@@ -105,10 +105,10 @@
  			rotate_x -= 1;
 
  		else if (key == GLFW_KEY_Q && mods==GLFW_MOD_SHIFT)
- 			face_rotate_x -= 1; 		
+ 			face_rotate_x -= 1;
  		else if (key == GLFW_KEY_Q)
  			face_rotate_x += 1;
- 		
+
  		else if (key == GLFW_KEY_W && mods==GLFW_MOD_SHIFT)
  			face_rotate_y -= 1;
  		else if (key == GLFW_KEY_W)
@@ -245,13 +245,13 @@
  		else if (key == GLFW_KEY_SPACE && mods == GLFW_MOD_SHIFT){
  			car_mode = true;
  			robot_mode = false;
- 		} 			
+ 		}
  		else if (key == GLFW_KEY_SPACE){
  			car_mode = false;
  			robot_mode = true;
  		}
 
- 	}	
+ 	}
 
  	void p()
  	{
@@ -295,3 +295,34 @@
 		std::cout<<right_foot_angle<<std::endl;//-90
  	}
  };
+
+ GLuint LoadTexture(const char* pic)
+ {
+   unsigned char header[54]; // Each BMP file begins by a 54-bytes header
+   unsigned int dataPos;     // Position in the file where the actual data begins
+   unsigned int width, height;
+   unsigned int imageSize;   // = width*height*3
+
+   unsigned char * data;
+   FILE * file = fopen(pic,"rb");
+   fread(header, 1, 54, file);
+   dataPos    = *(int*)&(header[0x0A]);
+   imageSize  = *(int*)&(header[0x22]);
+   width      = *(int*)&(header[0x12]);
+   height     = *(int*)&(header[0x16]);
+   data = new unsigned char [imageSize];
+   fread(data,1,imageSize,file);
+   fclose(file);
+
+   GLuint textureID;
+   glGenTextures(1, &textureID);
+   glBindTexture(GL_TEXTURE_2D, textureID);
+   glTexImage2D(GL_TEXTURE_2D, 0,GL_RGB, width, height, 0, GL_BGR, GL_UNSIGNED_BYTE, data);
+
+   glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
+   glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
+   glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+   glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+   free(data);
+   return textureID;
+ }

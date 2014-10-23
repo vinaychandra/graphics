@@ -25,12 +25,14 @@
 #include <GLFW/glfw3.h>
 
 #include <iostream>
+#include <stdio.h>
+#include <cstdlib>
 
 namespace csX75
 {
   //! Initialize GL State
   void initGL(void);
- 
+
   //!GLFW Error Callback
   void error_callback(int error, const char* description);
   //!GLFW framebuffer resize callback
@@ -38,6 +40,11 @@ namespace csX75
   //!GLFW keyboard callback
   void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods);
 };
+
+// ----------------------------------------------------------
+// Texture Functions
+// ----------------------------------------------------------
+GLuint LoadTexture(const char*);
 
 // ----------------------------------------------------------
 // Global Variables
