@@ -6,4 +6,6 @@ Graphics project of creating transformers
 * 120050063 - Vinay Chandra Dommeti
 * 120050070 - Nikhil Sriram Dodda
 
-Link to html file (It is present in the HTML folder)
+##Textures Folder
+
+This folder contains the textures required for the transformer design in **bmp** format.
