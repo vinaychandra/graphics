@@ -50,7 +50,7 @@ double wheel_rotate = 0;
 void ListFace()
 {
 	glNewList(Face, GL_COMPILE);
-		glColor3f(0.8,0,0);
+		glColor3f(0.8,1,0.2);
 		glBegin(GL_QUAD_STRIP);
 			glVertex3f(-0.1,0.2,-0.001);
 			glVertex3f(-0.1,0,-0.001);
@@ -134,6 +134,30 @@ void ListHood()
 			glVertex3f(0.21,0.5,0);
 		glEnd();
 		glBegin(GL_QUADS);
+			glVertex3f(-0.21,0.5,0);
+			glVertex3f(0.21,0.5,0);
+			glVertex3f(0.21,0.5,-0.15);
+			glVertex3f(-0.21,0.5,-0.15);			
+		glEnd();
+
+		glColor3f(1,1,1);
+		glBegin(GL_QUADS);
+			glVertex3f(-0.2,0.501,-0.05);
+			glVertex3f(-0.18,0.501,-0.05);
+			glVertex3f(-0.18,0.501,-0.075);
+			glVertex3f(-0.2,0.501,-0.075);			
+		glEnd();
+		glBegin(GL_QUADS);
+			glVertex3f(0.2,0.501,-0.05);
+			glVertex3f(0.18,0.501,-0.05);
+			glVertex3f(0.18,0.501,-0.075);
+			glVertex3f(0.2,0.501,-0.075);			
+		glEnd();
+
+
+
+		glColor3f(0,0,0);
+		glBegin(GL_LINE_LOOP);
 			glVertex3f(-0.21,0.5,0);
 			glVertex3f(0.21,0.5,0);
 			glVertex3f(0.21,0.5,-0.15);
@@ -321,7 +345,7 @@ void ListShoulderJoint()
 void ListHand()
 {
 	glNewList(Hand, GL_COMPILE);
-		glColor3f(0.7,0.7,0.1);
+		glColor3f(1,1,0.1);
 		glBegin(GL_QUAD_STRIP);
 			glVertex3f(-0.08,0,0);
 			glVertex3f(-0.08,-0.27,0);
@@ -518,8 +542,8 @@ void ListThigh()
 void ListLeg()
 {
 	glNewList(Leg, GL_COMPILE);
-	glColor3f(0.5,0.5,0);//0.39
-		
+	//0.39
+		glColor3f(0.1,0,0.6);
 		glBegin(GL_QUADS);
 			glVertex3f(-0.09,-0.7,-0.5);
 			glVertex3f(0.09,-0.7,-0.5);
@@ -556,7 +580,7 @@ void ListLeg()
 void ListFoot()
 {
 	glNewList(Foot, GL_COMPILE);
-		glColor3f(0.1,0.1,0.8);
+		glColor3f(1,0.8,0);
 		glBegin(GL_QUAD_STRIP);
 			glVertex3f(-0.09,-0.7,-0.2);
 			glVertex3f(-0.09,-1.1,-0.2);

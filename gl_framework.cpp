@@ -254,15 +254,15 @@
 
 
  		else if (key == GLFW_KEY_Z && mods == GLFW_MOD_SHIFT)
- 			wheel_turn += 1;
+ 			wheel_turn += 0.25;
 		else if (key == GLFW_KEY_Z)
- 			wheel_turn -= 1;
+ 			wheel_turn -= 0.25;
  		
 
  		else if (key == GLFW_KEY_X && mods == GLFW_MOD_SHIFT)
- 			wheel_rotate += 1;
+ 			wheel_rotate += 7;
  		else if (key == GLFW_KEY_X)
- 			wheel_rotate -= 1;
+ 			wheel_rotate -= 7;
  		
  	}	
 

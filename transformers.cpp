@@ -10,6 +10,7 @@ double rotate_z = 0;
 
 bool car_mode = false;
 bool robot_mode = false;
+GLuint tyretex, retex, rtex, tex;
 
 void GenLists();
 void toCar();
@@ -63,6 +64,14 @@ int main (int argc, char *argv[])
 	//Load all the lists
 	GenLists();
 
+	//Load Textures
+	tyretex=LoadTexture("textures/rim.bmp");
+	retex=LoadTexture("textures/face.bmp");
+	rtex=LoadTexture("textures/autobot.bmp");
+	tex=LoadTexture("textures/nameplate.bmp");
+	//glDisable(GL_TEXTURE_2D);
+
+
 	// Loop until the user closes the window
 	while (glfwWindowShouldClose(window) == 0)
 	{
@@ -77,7 +86,7 @@ int main (int argc, char *argv[])
 	// Poll for and process events
 		glfwPollEvents();
 	}
-
+ 
 	glfwDestroyWindow(window);
 	glfwTerminate();
 	return 0;
@@ -103,8 +112,12 @@ void renderGL()
 	// Other Transformations
 	// glTranslatef( 0.1, 0.0, 0.0 );			// Not included
 	// glRotatef( 180, 0.0, 1.0, 0.0 );		// Not included
-
-	// Rotate when user changes rotate_x and rotate_y
+	
+	//glRotatef(90,-1,0,0);
+	//glRotatef(-8,0,1,0);
+	//glRotatef(-74,0,0,1);
+	
+// Rotate when user changes rotate_x and rotate_y
 	glRotatef( rotate_x, 1.0, 0.0, 0.0 );
 	glRotatef( rotate_y, 0.0, 1.0, 0.0 );
 	glRotatef( rotate_z, 0.0, 0.0, 1.0 );
@@ -117,34 +130,110 @@ void renderGL()
 
 		glRotatef(face_rotate_x, 1.0, 0.0, 0.0 );
 		glRotatef(face_rotate_y, 0.0, 1.0, 0.0 );
+
+		glEnable(GL_TEXTURE_2D);
+			glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
+			
+			glBindTexture(GL_TEXTURE_2D, retex);
+			
+			glBegin(GL_QUADS);
+				glTexCoord2f(0,0); glVertex3f(0.1,0,-0.201);
+				glTexCoord2f(1,0); glVertex3f(-0.1,0,-0.201);
+				glTexCoord2f(1,1); glVertex3f(-0.1,0.2,-0.201);
+				glTexCoord2f(0,1); glVertex3f(0.1,0.2,-0.201);
+			glEnd();
+			
+		glDisable(GL_TEXTURE_2D);
 		glCallList(Face);
 	glPopMatrix();
 
 	glPushMatrix();
 		glRotatef(hood_rotate_x, 1.0,0,0);
+
+
+
+		glEnable(GL_TEXTURE_2D);
+		glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
+			
+		glBindTexture(GL_TEXTURE_2D, tex);
+		glBegin(GL_QUADS);
+			glTexCoord2f(0,0); glVertex3f(-0.15,0.501,-0.025);
+			glTexCoord2f(1,0); glVertex3f(0.15,0.501,-0.025);
+			glTexCoord2f(1,1); glVertex3f(0.15,0.501,-0.125);
+			glTexCoord2f(0,1); glVertex3f(-0.15,0.501,-0.125);
+		glEnd();
+		glDisable(GL_TEXTURE_2D);
+
+
+		glEnable(GL_TEXTURE_2D);
+		glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
+			
+		glBindTexture(GL_TEXTURE_2D, rtex);
+		glBegin(GL_QUADS);
+			glTexCoord2f(0,0); glVertex3f(-0.21,0.5,-0.151);
+			glTexCoord2f(1,0); glVertex3f(0.21,0.5,-0.151);
+			glTexCoord2f(1,1); glVertex3f(0.21,0.2,-0.301);
+			glTexCoord2f(0,1); glVertex3f(-0.21,0.2,-0.301);
+		glEnd();
+		glDisable(GL_TEXTURE_2D);
+
+
 		glCallList(Hood);
 		glPushMatrix();
-			glColor3f(0.1,0.1,0.1);
+			glColor3f(0.05,0.05,0.05);
 			GLUquadricObj *quadratic;
 			quadratic = gluNewQuadric();
 			glTranslatef(-0.28,0,0);
 			
 			glRotatef(90.0, 0.0, 1.0, 0.0);
 			glRotatef(wheel_turn,-1,0,0);
-			glRotatef(wheel_rotate,0,0,1);
+			glRotatef(wheel_rotate,0,0,-1);
+
+
+
+			glEnable(GL_TEXTURE_2D);
+			glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
+			
+			glBindTexture(GL_TEXTURE_2D, tyretex);
+			
+			glBegin(GL_QUADS);
+				glTexCoord2f(0,0);	glVertex3f(-0.07,-0.07,-0.001);
+				glTexCoord2f(1,0); glVertex3f(0.07,-0.07,-0.001);
+				glTexCoord2f(1,1);	glVertex3f(0.07,0.07,-0.001);
+				glTexCoord2f(0,1); glVertex3f(-0.07,0.07,-0.001);
+			glEnd();
+			
+			glDisable(GL_TEXTURE_2D);
+
 			gluCylinder(quadratic,0.1,0.1,0.1,32,32);
 			gluDisk(quadratic,0,0.1,32,32);
 
 		glPopMatrix();
 
 		glPushMatrix();
-			glColor3f(0.1,0.1,0.1);
+			glColor3f(0.05,0.05,0.05);
 			quadratic = gluNewQuadric();
 			glTranslatef(0.28,0,0);
 			
 			glRotatef(90.0, 0.0, -1.0, 0.0);
 			glRotatef(wheel_turn,1,0,0);//
 			glRotatef(wheel_rotate,0,0,1);//
+
+
+			glEnable(GL_TEXTURE_2D);
+			glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
+			
+			glBindTexture(GL_TEXTURE_2D, tyretex);
+			
+			glBegin(GL_QUADS);
+				glTexCoord2f(0,0);	glVertex3f(-0.07,-0.07,-0.001);
+				glTexCoord2f(1,0); glVertex3f(0.07,-0.07,-0.001);
+				glTexCoord2f(1,1);	glVertex3f(0.07,0.07,-0.001);
+				glTexCoord2f(0,1); glVertex3f(-0.07,0.07,-0.001);
+			glEnd();
+			
+			glDisable(GL_TEXTURE_2D);
+
 			gluCylinder(quadratic,0.1,0.1,0.1,32,32);
 			gluDisk(quadratic,0,0.1,32,32);
 		glPopMatrix();
@@ -252,13 +341,31 @@ void renderGL()
 		
 		glPushMatrix();
 
-			glColor3f(0.1,0.1,0.1);
+			glColor3f(0.05,0.05,0.05);
 			//GLUquadricObj *quadratic;
 			quadratic = gluNewQuadric();
 			//glRotatef(wheel_turn,0,0,1);
 			glTranslatef(-0.15,-0.75,0);
 			glRotatef(90.0, 0.0, 1.0, 0.0);
-			glRotatef(wheel_rotate,0,0,1);
+			glRotatef(wheel_rotate,0,0,-1);
+
+
+			
+			glEnable(GL_TEXTURE_2D);
+			glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_DECAL);
+			
+			glBindTexture(GL_TEXTURE_2D, tyretex);
+			//glPushMatrix();
+			glBegin(GL_QUADS);
+				glTexCoord2f(0,0);	glVertex3f(-0.07,-0.07,-0.001);
+				glTexCoord2f(1,0); glVertex3f(0.07,-0.07,-0.001);
+				glTexCoord2f(1,1);	glVertex3f(0.07,0.07,-0.001);
+				glTexCoord2f(0,1); glVertex3f(-0.07,0.07,-0.001);
+			glEnd();
+			
+			glDisable(GL_TEXTURE_2D);
+
+
 			gluCylinder(quadratic,0.1,0.1,0.1,32,32);
 			gluDisk(quadratic,0,0.1,32,32);
 
@@ -286,11 +393,27 @@ void renderGL()
 		glCallList(Foot);
 		
 		glPushMatrix();
-			glColor3f(0.1,0.1,0.1);
+			glColor3f(0.05,0.05,0.05);
 			quadratic = gluNewQuadric();
 			glTranslatef(0.15,-0.75,0);
 			glRotatef(90.0, 0.0, -1.0, 0.0);
 			glRotatef(wheel_rotate,0,0,1);
+
+
+			glEnable(GL_TEXTURE_2D);
+			glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_DECAL);
+			
+			glBindTexture(GL_TEXTURE_2D, tyretex);
+			//glPushMatrix();
+			glBegin(GL_QUADS);
+				glTexCoord2f(0,0);	glVertex3f(0.07,0.07,-0.001);
+				glTexCoord2f(1,0); glVertex3f(0.07,-0.07,-0.001);
+				glTexCoord2f(1,1);	glVertex3f(-0.07,-0.07,-0.001);
+				glTexCoord2f(0,1); glVertex3f(-0.07,0.07,-0.001);
+			glEnd();
+			
+			glDisable(GL_TEXTURE_2D);
+			
 			gluCylinder(quadratic,0.1,0.1,0.1,32,32);
 			gluDisk(quadratic,0,0.1,32,32);
 
