@@ -6,4 +6,4 @@ Graphics project of creating transformers
 * 120050063 - Vinay Chandra Dommeti
 * 120050070 - Nikhil Sriram Dodda
 
-Link to html file (It is present in the HTML folder)
+Link to html file:  www.cse.iitb.ac.in/~vinaychandra/ass22.html
