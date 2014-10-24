@@ -4,7 +4,7 @@
 Graphics project of creating transformers
 
 * 120050063 - Vinay Chandra Dommeti
-* 120050070 - Nikhil Sriram Dodda
+* 120050070 - Nikhil Sri Ram Dodda
 
 ##Textures Folder
 

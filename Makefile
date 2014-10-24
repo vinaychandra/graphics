@@ -2,12 +2,12 @@ OPENGLLIB= -lGL
 GLEWLIB= -lGLEW
 GLFWLIB = -lglfw
 LIBS=$(OPENGLLIB) $(GLEWLIB) $(GLFWLIB) -lGLU
-LDFLAGS=-L/usr/local/lib 
+LDFLAGS=-L/usr/local/lib
 CPPFLAGS=-I/usr/local/include
 
 BIN=output
-SRCS=parts.cpp gl_framework.cpp transformers.cpp transformations.cpp
-INCLUDES=gl_framework.hpp
+SRCS=transformer.cpp gl_framework.cpp scenery.cpp main.cpp
+INCLUDES=gl_framework.hpp transformer.hpp scenery.hpp 
 
 
 
@@ -21,5 +21,3 @@ clean:
 	rm -f $(BIN)
 	rm -f *.o
 	rm -f *~
-
-

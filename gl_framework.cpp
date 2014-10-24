@@ -19,310 +19,134 @@
 */
 
 #include "gl_framework.hpp"
+int CameraMode = 0;
 
- namespace csX75
- {
- 	int win_width;
- 	int win_height;
+namespace csX75
+{
+	int win_width;
+	int win_height;
 
- 	void p();
-
-  //! Initialize GL State
- 	void initGL(void)
- 	{
-		//Set framebuffer clear color
-		//	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-		glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
-
-		//Set depth buffer furthest depth
+	//! Initialize GL State
+	void initGL(void)
+	{
 		glClearDepth(1.0);
-
 		//Set depth test to less-than
 		glDepthFunc(GL_LESS);
-
 		//Enable depth testing
-		//  glEnable(GL_DEPTH_TEST);
-		//Enable Gourard shading
-		//	glEnable(GL_CULL_FACE);
-
 		glEnable(GL_DEPTH_TEST);
-		glShadeModel(GL_SMOOTH);
+		glEnable(GL_DEPTH_BUFFER_BIT); 
+		
+		glEnable(GL_COLOR_MATERIAL);
+		
 		glMatrixMode(GL_PROJECTION);
-		glOrtho(-1, 1, -1, 1, -1, 1);
- 	}
+		//Enable Gourard shading
+		glShadeModel(GL_SMOOTH);
+		// glEnable(GL_BLEND);
+		// glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+		glMatrixMode(GL_PROJECTION);
+		glLoadIdentity();				// Reset The Projection Matrix
+		
+		gluPerspective(50,1, 0.1, 1000);
+		glMatrixMode(GL_MODELVIEW);
 
-  //!GLFW Error Callback
- 	void error_callback(int error, const char* description)
- 	{
- 		std::cerr<<description<<std::endl;
- 	}
+	}
 
-  //!GLFW framebuffer resize callback
- 	void framebuffer_size_callback(GLFWwindow* window, int width, int height)
- 	{
- 		if	( height == 0 ) height = 1;
 
- 		glMatrixMode( GL_PROJECTION );
- 		glLoadIdentity();
+	//!GLFW Error Callback
+	void error_callback(int error, const char* description)
+	{
+		std::cerr<<description<<std::endl;
+	}
 
- 		//Draw to the whole window
- 		glViewport( 0, 0, width, height );
+	//!GLFW framebuffer resize callback
+	void framebuffer_size_callback(GLFWwindow* window, int width, int height)
+	{
+		glViewport(0, 0, width, height);
+	}
 
-		//Keep the aspect ratio fixed
- 		double aspect;
- 		if (width > height)
- 		{
- 			aspect = (double)width/(double)height;
- 			glOrtho(-aspect, aspect, -1.0, 1.0, -1.0, 1.0);
- 		}
- 		else
- 		{
- 			aspect = (double)height/(double)width;
- 			glOrtho(-1.0, 1.0, -aspect, aspect, -1.0, 1.0);
- 		}
+	//!GLFW keyboard callback
+	void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
+	{
+		//!Close the window if the ESC key was pressed
+		if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
+			glfwSetWindowShouldClose(window, GL_TRUE);
+		
+		if(key == GLFW_KEY_UP)
+			transformer.accelerate();
+		if(key == GLFW_KEY_DOWN && action == GLFW_PRESS)
+			transformer.brake();
+		
+		if(key == GLFW_KEY_LEFT){
+			transformer.wheel_turn = -20;
+			if (transformer.velocity >= 0)
+				transformer.direction += 1;
+			else 
+				transformer.direction -= 1;
+		}
+		if(key == GLFW_KEY_LEFT && action == GLFW_RELEASE)
+			transformer.wheel_turn = 0;
 
- 		win_width = width;
- 		win_height = height;
- 	}
 
-  //!GLFW keyboard callback
- 	void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
- 	{
-     //!Close the window if the ESC key was pressed
- 		if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
- 			glfwSetWindowShouldClose(window, GL_TRUE);
- 		else if (key == GLFW_KEY_RIGHT)
- 			rotate_y += 1;
- 		else if (key == GLFW_KEY_LEFT)
- 			rotate_y -= 1;
- 		else if (key == GLFW_KEY_UP && mods==GLFW_MOD_SHIFT)
- 			rotate_z += 1;
- 		else if (key == GLFW_KEY_DOWN && mods==GLFW_MOD_SHIFT)
- 			rotate_z -= 1;
- 		else if (key == GLFW_KEY_UP)
- 			rotate_x += 1;
- 		else if (key == GLFW_KEY_DOWN)
- 			rotate_x -= 1;
+		if(key == GLFW_KEY_RIGHT){
+			transformer.wheel_turn = 20;
+			if (transformer.velocity >= 0)
+				transformer.direction -= 1;
+			else
+				transformer.direction += 1;
+		}
+		if(key == GLFW_KEY_RIGHT && action == GLFW_RELEASE)
+			transformer.wheel_turn = 0;
+		
 
- 		else if (key == GLFW_KEY_Q && mods==GLFW_MOD_SHIFT)
- 			face_rotate_x -= 1;
- 		else if (key == GLFW_KEY_Q)
- 			face_rotate_x += 1;
-
- 		else if (key == GLFW_KEY_W && mods==GLFW_MOD_SHIFT)
- 			face_rotate_y -= 1;
- 		else if (key == GLFW_KEY_W)
- 			face_rotate_y += 1;
-
- 		else if (key == GLFW_KEY_E && mods==GLFW_MOD_SHIFT)
- 			hood_rotate_x -= 1;
- 		else if (key == GLFW_KEY_E)
- 			hood_rotate_x += 1;
-
- 		else if (key == GLFW_KEY_R && mods==GLFW_MOD_SHIFT)
- 			windshield_full_rotate -= 1;
- 		else if (key == GLFW_KEY_R)
- 			windshield_full_rotate += 1;
-
- 		else if (key == GLFW_KEY_T && mods==GLFW_MOD_SHIFT)
- 			windshield_left_door -= 1;
- 		else if (key == GLFW_KEY_T)
- 			windshield_left_door += 1;
-
- 		else if (key == GLFW_KEY_Y && mods==GLFW_MOD_SHIFT)
- 			windshield_right_door -= 1;
- 		else if (key == GLFW_KEY_Y)
- 			windshield_right_door += 1;
-
- 		else if (key == GLFW_KEY_U && mods==GLFW_MOD_SHIFT)
- 			left_shoulder_angle -= 1;
- 		else if (key == GLFW_KEY_U)
- 			left_shoulder_angle += 1;
-
- 		else if (key == GLFW_KEY_I && mods==GLFW_MOD_SHIFT)
- 			right_shoulder_angle -= 1;
- 		else if (key == GLFW_KEY_I)
- 			right_shoulder_angle += 1;
-
- 		else if (key == GLFW_KEY_O && mods == GLFW_MOD_CONTROL)
- 			left_upper_arm_x += 1;
- 		else if (key == GLFW_KEY_O && mods == (GLFW_MOD_CONTROL | GLFW_MOD_SHIFT))
- 			left_upper_arm_x -= 1;
-
- 		else if (key == GLFW_KEY_O && mods == GLFW_MOD_ALT)
- 			left_upper_arm_y += 1;
- 		else if (key == GLFW_KEY_O && mods == (GLFW_MOD_ALT | GLFW_MOD_SHIFT))
- 			left_upper_arm_y -= 1;
-
- 		else if (key == GLFW_KEY_O && mods == GLFW_MOD_SHIFT)
- 			left_upper_arm_z += 1;
- 		else if (key == GLFW_KEY_O)
- 			left_upper_arm_z -= 1;
-
- 		else if (key == GLFW_KEY_P && mods == GLFW_MOD_CONTROL)
- 			right_upper_arm_x += 1;
- 		else if (key == GLFW_KEY_P && mods == (GLFW_MOD_CONTROL | GLFW_MOD_SHIFT))
- 			right_upper_arm_x -= 1;
-
- 		else if (key == GLFW_KEY_P && mods == GLFW_MOD_ALT)
- 			right_upper_arm_y += 1;
- 		else if (key == GLFW_KEY_P && mods == (GLFW_MOD_ALT | GLFW_MOD_SHIFT))
- 			right_upper_arm_y -= 1;
-
- 		else if (key == GLFW_KEY_P && mods == GLFW_MOD_SHIFT)
- 			right_upper_arm_z += 1;
- 		else if (key == GLFW_KEY_P)
- 			right_upper_arm_z -= 1;
-
- 		else if (key == GLFW_KEY_K && mods == GLFW_MOD_CONTROL)
- 			left_lower_arm_x += 1;
- 		else if (key == GLFW_KEY_K && mods == (GLFW_MOD_CONTROL | GLFW_MOD_SHIFT))
- 			left_lower_arm_x -= 1;
-
- 		else if (key == GLFW_KEY_K && mods == GLFW_MOD_ALT)
- 			left_lower_arm_y += 1;
- 		else if (key == GLFW_KEY_K && mods == (GLFW_MOD_ALT | GLFW_MOD_SHIFT))
- 			left_lower_arm_y -= 1;
-
- 		else if (key == GLFW_KEY_K && mods == GLFW_MOD_SHIFT)
- 			left_lower_arm_z += 1;
- 		else if (key == GLFW_KEY_K)
- 			left_lower_arm_z -= 1;
-
- 		else if (key == GLFW_KEY_L && mods == GLFW_MOD_CONTROL)
- 			right_lower_arm_x += 1;
- 		else if (key == GLFW_KEY_L && mods == (GLFW_MOD_CONTROL | GLFW_MOD_SHIFT))
- 			right_lower_arm_x -= 1;
-
- 		else if (key == GLFW_KEY_L && mods == GLFW_MOD_ALT)
- 			right_lower_arm_y += 1;
- 		else if (key == GLFW_KEY_L && mods == (GLFW_MOD_ALT | GLFW_MOD_SHIFT))
- 			right_lower_arm_y -= 1;
-
- 		else if (key == GLFW_KEY_L && mods == GLFW_MOD_SHIFT)
- 			right_lower_arm_z += 1;
- 		else if (key == GLFW_KEY_L)
- 			right_lower_arm_z -= 1;
-
- 		else if (key == GLFW_KEY_A && mods == GLFW_MOD_SHIFT)
- 			left_thigh_angle += 1;
- 		else if (key == GLFW_KEY_A)
- 			left_thigh_angle -= 1;
-
- 		else if (key == GLFW_KEY_S && mods == GLFW_MOD_SHIFT)
- 			right_thigh_angle += 1;
- 		else if (key == GLFW_KEY_S)
- 			right_thigh_angle -= 1;
-
- 		else if (key == GLFW_KEY_D && mods == GLFW_MOD_SHIFT)
- 			left_knee_angle += 1;
- 		else if (key == GLFW_KEY_D)
- 			left_knee_angle -= 1;
-
-		else if (key == GLFW_KEY_F && mods == GLFW_MOD_SHIFT)
- 			right_knee_angle += 1;
- 		else if (key == GLFW_KEY_F)
- 			right_knee_angle -= 1;
-
- 		else if (key == GLFW_KEY_G && mods == GLFW_MOD_SHIFT)
- 			left_foot_angle += 1;
- 		else if (key == GLFW_KEY_G)
- 			left_foot_angle -= 1;
-
- 		else if (key == GLFW_KEY_H && mods == GLFW_MOD_SHIFT)
- 			right_foot_angle += 1;
- 		else if (key == GLFW_KEY_H)
- 			right_foot_angle -= 1;
-
- 		else if (key == GLFW_KEY_J && mods == GLFW_MOD_SHIFT)
- 			leg_translate -= 0.01;
- 		else if (key == GLFW_KEY_J)
- 			leg_translate += 0.01;
-
- 		else if (key == GLFW_KEY_ENTER)
- 			p();
-
- 		else if (key == GLFW_KEY_SPACE && mods == GLFW_MOD_SHIFT){
- 			car_mode = true;
- 			robot_mode = false;
+		if (key == GLFW_KEY_SPACE && mods == GLFW_MOD_SHIFT){
+ 			transformer.car_mode = true;
+ 			transformer.robot_mode = false;
  		}
  		else if (key == GLFW_KEY_SPACE){
- 			car_mode = false;
- 			robot_mode = true;
+ 			transformer.car_mode = false;
+ 			transformer.robot_mode = true;
  		}
 
- 	}
+ 		if (key == GLFW_KEY_C && action == GLFW_PRESS){
+ 			CameraMode += 1;
+ 			CameraMode %= 3;
+ 		}
 
- 	void p()
- 	{
-		std::cout<<rotate_y<<std::endl;//90
-		std::cout<<rotate_x<<std::endl;//11=0
-		std::cout<<rotate_z<<std::endl;//0
+ 		if (key == GLFW_KEY_L && mods == GLFW_MOD_SHIFT){
+ 			glDisable(GL_LIGHT0);
+ 			glDisable(GL_LIGHT1);
+ 		}
 
-		std::cout<<face_rotate_x<<std::endl;//0
-		std::cout<<face_rotate_y<<std::endl;//180
+ 		else if (key == GLFW_KEY_L){
+ 			glEnable(GL_LIGHT0);
+ 			glEnable(GL_LIGHT1);
+ 		}
 
-		std::cout<<hood_rotate_x<<std::endl;//180
+ 		if (key == GLFW_KEY_K && mods == GLFW_MOD_SHIFT){
+ 			glDisable(GL_LIGHT2);
+ 			glDisable(GL_LIGHT3);
+ 		}
 
-		std::cout<<windshield_full_rotate<<std::endl;//120
-		std::cout<<windshield_right_door<<std::endl;//35
-		std::cout<<windshield_left_door<<std::endl;//35
+ 		else if (key == GLFW_KEY_K){
+ 			glEnable(GL_LIGHT2);
+ 			glEnable(GL_LIGHT3);
+ 		}
+	}
+};
 
-		std::cout<<left_shoulder_angle<<std::endl;//90
-		std::cout<<right_shoulder_angle<<std::endl;//90
-
-		std::cout<<left_upper_arm_x<<std::endl;//0
-		std::cout<<left_upper_arm_y<<std::endl;//0
-		std::cout<<left_upper_arm_z<<std::endl;//0
-		std::cout<<right_upper_arm_x<<std::endl;//0
-		std::cout<<right_upper_arm_y<<std::endl;//0
-		std::cout<<right_upper_arm_z<<std::endl;//0
-
-		std::cout<<left_lower_arm_x<<std::endl;//0
-		std::cout<<left_lower_arm_y<<std::endl;//0
-		std::cout<<left_lower_arm_z<<std::endl;//-20
-		std::cout<<right_lower_arm_x<<std::endl;//0
-		std::cout<<right_lower_arm_y<<std::endl;//0
-		std::cout<<right_lower_arm_z<<std::endl;//20
-
-		std::cout<<leg_translate<<std::endl;//0.2
-
-		std::cout<<left_thigh_angle<<std::endl;//0
-		std::cout<<right_thigh_angle<<std::endl;//0
-		std::cout<<left_knee_angle<<std::endl;//0
-		std::cout<<right_knee_angle<<std::endl;//0
-		std::cout<<left_foot_angle<<std::endl;//-90
-		std::cout<<right_foot_angle<<std::endl;//-90
- 	}
- };
-
- GLuint LoadTexture(const char* pic)
- {
-   unsigned char header[54]; // Each BMP file begins by a 54-bytes header
-   unsigned int dataPos;     // Position in the file where the actual data begins
-   unsigned int width, height;
-   unsigned int imageSize;   // = width*height*3
-
-   unsigned char * data;
-   FILE * file = fopen(pic,"rb");
-   fread(header, 1, 54, file);
-   dataPos    = *(int*)&(header[0x0A]);
-   imageSize  = *(int*)&(header[0x22]);
-   width      = *(int*)&(header[0x12]);
-   height     = *(int*)&(header[0x16]);
-   data = new unsigned char [imageSize];
-   fread(data,1,imageSize,file);
-   fclose(file);
-
-   GLuint textureID;
-   glGenTextures(1, &textureID);
-   glBindTexture(GL_TEXTURE_2D, textureID);
-   glTexImage2D(GL_TEXTURE_2D, 0,GL_RGB, width, height, 0, GL_BGR, GL_UNSIGNED_BYTE, data);
-
-   glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
-   glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
-   glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-   glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-   free(data);
-   return textureID;
- }
+void Camera(){
+	if(CameraMode == 0)
+			gluLookAt(2,5,8,0,0,0,0,1,0);
+	else if(CameraMode == 1)
+			gluLookAt(
+				transformer.position_x-7.0*sin(transformer.direction*PI/180),transformer.position_y+5,transformer.position_z-7.0*cos(transformer.direction*PI/180),
+				transformer.position_x,transformer.position_y,transformer.position_z,
+				0,1,0
+				);
+	else if(CameraMode == 2)
+			gluLookAt(
+				transformer.position_x+0.1*sin(transformer.direction*PI/180),transformer.position_y+0.42,transformer.position_z+0.1*cos(transformer.direction*PI/180),
+				transformer.position_x+5*sin(transformer.direction*PI/180),transformer.position_y+0.42,transformer.position_z+5*cos(transformer.direction*PI/180),
+				0,1,0
+				);
+}

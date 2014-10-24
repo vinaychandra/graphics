@@ -28,6 +28,8 @@
 #include <stdio.h>
 #include <cstdlib>
 
+#include "transformer.hpp"
+
 namespace csX75
 {
   //! Initialize GL State
@@ -42,67 +44,10 @@ namespace csX75
 };
 
 // ----------------------------------------------------------
-// Texture Functions
+// Camera Functions and Variables
 // ----------------------------------------------------------
-GLuint LoadTexture(const char*);
+extern int CameraMode;
 
-// ----------------------------------------------------------
-// Global Variables
-// ----------------------------------------------------------
-
-#define Face 1
-#define Torso 2
-#define Hood 3
-#define Windshield 4
-#define LeftDoor 5
-#define RightDoor 6
-#define ShoulderJoint 7
-#define Hand 8
-#define BackBone 9
-#define Thigh 10
-#define Leg 11
-#define Foot 12
-
-extern double rotate_y;
-extern double rotate_x;
-extern double rotate_z;
-
-extern double face_rotate_x;
-extern double face_rotate_y;
-
-extern double hood_rotate_x;
-
-extern double windshield_full_rotate;
-extern double windshield_right_door;
-extern double windshield_left_door;
-
-extern double left_shoulder_angle;
-extern double right_shoulder_angle;
-
-extern double left_upper_arm_x;
-extern double left_upper_arm_y;
-extern double left_upper_arm_z;
-extern double right_upper_arm_x;
-extern double right_upper_arm_y;
-extern double right_upper_arm_z;
-
-extern double left_lower_arm_x;
-extern double left_lower_arm_y;
-extern double left_lower_arm_z;
-extern double right_lower_arm_x;
-extern double right_lower_arm_y;
-extern double right_lower_arm_z;
-
-extern double leg_translate;
-
-extern double left_thigh_angle;
-extern double right_thigh_angle;
-extern double left_knee_angle;
-extern double right_knee_angle;
-extern double left_foot_angle;
-extern double right_foot_angle;
-
-extern bool car_mode;
-extern bool robot_mode;
+void Camera();
 
 #endif
