@@ -9,7 +9,7 @@
 void renderGL();
 void routines();
 
-struct_transformer transformer;
+struct_transformer transformer, transformer_2;
 scenery world;
 
 int main(int argc, char** argv)
@@ -58,8 +58,10 @@ int main(int argc, char** argv)
 
 	//Get the display lists and textures
 	transformer.GenLists();	
+	transformer_2.GenLists();	
 	world.load_textures();
 	transformer.LoadTextures();
+	transformer_2.LoadTextures();
 
 	// Loop until the user closes the window
 	while (glfwWindowShouldClose(window) == 0)
@@ -99,6 +101,14 @@ void renderGL(void)
 		
 			transformer.draw();
 		glPopMatrix();
+
+		glPushMatrix();
+		
+			/*glTranslatef(transformer_2.position_x,transformer_2.position_y,transformer_2.position_z);
+			glRotatef(transformer_2.direction,0,1,0);*/
+		
+			transformer_2.draw();
+		glPopMatrix();
 	
 		world.create_all();
 		
@@ -110,4 +120,5 @@ void renderGL(void)
 void routines()
 {
 	transformer.position_routine();
+	transformer_2.position_routine();
 }

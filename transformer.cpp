@@ -33,15 +33,7 @@ GLuint LoadTexture(const char* pic)
 
 void struct_transformer::draw(){
 	//	Clear screen and Z-buffer
-	glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
-
-/*	glColor3f(1,0,0);
-	glBegin(GL_QUADS);
-		glVertex3f(-10,0,10);
-		glVertex3f(10,0,10);
-		glVertex3f(10,0,-10);
-		glVertex3f(-10,0,-10);
-	glEnd();*/
+	// glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
 
 	//Set the orientation of the car properly
 

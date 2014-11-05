@@ -148,7 +148,7 @@ struct struct_transformer {
 	void position_routine();
 };
 
-extern struct_transformer transformer;
+extern struct_transformer transformer, transformer_2;
 extern int camera_mode;
 
 #define Face 1
