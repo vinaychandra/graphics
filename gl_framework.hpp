@@ -50,4 +50,6 @@ extern int CameraMode;
 
 void Camera();
 
+void playback();
+void write_frame();
 #endif

@@ -20,6 +20,7 @@
 
 #include "gl_framework.hpp"
 int CameraMode = 0;
+bool playback_mode = false;
 
 namespace csX75
 {
@@ -130,6 +131,17 @@ namespace csX75
  		else if (key == GLFW_KEY_K){
  			glEnable(GL_LIGHT2);
  			glEnable(GL_LIGHT3);
+ 		}
+
+ 		if (key == GLFW_KEY_X && action == GLFW_RELEASE){
+ 			write_frame();
+ 		}
+
+ 		if (key == GLFW_KEY_Z && action == GLFW_RELEASE){
+ 			if(!playback_mode){
+ 				playback_mode = true;
+ 				playback();	
+ 			}
  		}
 	}
 };
