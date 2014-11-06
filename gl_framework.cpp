@@ -20,6 +20,15 @@
 
 #include "gl_framework.hpp"
 int CameraMode = 0;
+
+double globalCameraX = 1.5;
+double globalCameraY = 2;
+double globalCameraZ = 3;
+
+double globalCameraLX = 0.5;
+double globalCameraLY = 1.3;
+double globalCameraLZ = 0;
+
 bool playback_mode = false;
 
 namespace csX75
@@ -148,7 +157,7 @@ namespace csX75
 
 void Camera(){
 	if(CameraMode == 0)
-			gluLookAt(1.5,2,3,0.5,1.3,0,0,1,0);
+			gluLookAt(globalCameraX,globalCameraY,globalCameraZ,globalCameraLX,globalCameraLY,globalCameraLZ,0,1,0);
 	else if(CameraMode == 1)
 			gluLookAt(
 				transformer.position_x-7.0*sin(transformer.direction*PI/180),transformer.position_y+5,transformer.position_z-7.0*cos(transformer.direction*PI/180),

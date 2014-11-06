@@ -48,6 +48,15 @@ namespace csX75
 // ----------------------------------------------------------
 extern int CameraMode;
 
+extern double globalCameraX;
+extern double globalCameraY;
+extern double globalCameraZ;
+
+extern double globalCameraLX;
+extern double globalCameraLY;
+extern double globalCameraLZ;
+
+
 void Camera();
 
 void playback();
