@@ -6,7 +6,8 @@
 #include "gl_framework.hpp"
 #include "scenery.hpp"
 
-#define fps 30.0
+#define frames_between_snapshots 30.0
+#define time_between_snapshots 1.0
 
 void renderGL();
 void routines();
@@ -156,8 +157,8 @@ void playback()
 		myfile >>  transformer_t_2.position_x>> transformer_t_2.position_y>> transformer_t_2.position_z>> transformer_t_2.direction>> transformer_t_2.velocity>> transformer_t_2.forward>> transformer_t_2.backward>> transformer_t_2.face_rotate_x>> transformer_t_2.face_rotate_y>> transformer_t_2.face_rotate_z>> transformer_t_2.hood_rotate_x>> transformer_t_2.windshield_full_rotate>> transformer_t_2.windshield_left_door>> transformer_t_2.windshield_right_door>> transformer_t_2.left_shoulder_angle>> transformer_t_2.right_shoulder_angle>> transformer_t_2.left_upper_arm_x>> transformer_t_2.left_upper_arm_y>> transformer_t_2.left_upper_arm_z>> transformer_t_2.right_upper_arm_x>> transformer_t_2.right_upper_arm_y>> transformer_t_2.right_upper_arm_z>> transformer_t_2.left_lower_arm_x>> transformer_t_2.left_lower_arm_y>> transformer_t_2.left_lower_arm_z>> transformer_t_2.right_lower_arm_x>> transformer_t_2.right_lower_arm_y>> transformer_t_2.right_lower_arm_z>> transformer_t_2.leg_translate>> transformer_t_2.left_thigh_angle>> transformer_t_2.right_thigh_angle>> transformer_t_2.left_knee_angle>> transformer_t_2.right_knee_angle>> transformer_t_2.left_foot_angle>> transformer_t_2.right_foot_angle>> transformer_t_2.windshield_move>> transformer_t_2.foot_move>> transformer_t_2.wheel_turn>> transformer_t_2.wheel_rotate>> transformer_t_2.car_mode>> transformer_t_2.robot_mode>> transformer_t_2.extra_movement_translation>> transformer_t_2.extra_movement_rotation;
 
 		glfwSetTime(0);
-		double timer = 1.0/fps;
-		while(glfwGetTime() <= 1){
+		double timer = time_between_snapshots/frames_between_snapshots;
+		while(glfwGetTime() <= time_between_snapshots){
 			while(glfwGetTime() < timer){}
 
 			{
@@ -266,7 +267,7 @@ void playback()
 			// Poll for and process events
 			glfwPollEvents();
 
-			timer += 1.0/fps;
+			timer += time_between_snapshots/frames_between_snapshots;
 		}
 		transformer_o_1 = transformer_t_1;
 		transformer_o_2 = transformer_t_2;
