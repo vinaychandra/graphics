@@ -81,34 +81,68 @@ namespace csX75
 		if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
 			glfwSetWindowShouldClose(window, GL_TRUE);
 		
-		if(key == GLFW_KEY_UP)
+
+		if(key == GLFW_KEY_UP && mods == GLFW_MOD_SHIFT)
+			transformer_2.accelerate();
+		else if(key == GLFW_KEY_UP)
 			transformer.accelerate();
-		if(key == GLFW_KEY_DOWN && action == GLFW_PRESS)
+		if(key == GLFW_KEY_DOWN && action == GLFW_PRESS && mods == GLFW_MOD_SHIFT)
+			transformer_2.brake();
+		else if(key == GLFW_KEY_DOWN && action == GLFW_PRESS)
 			transformer.brake();
+
 		
-		if(key == GLFW_KEY_LEFT){
+		
+		if(key == GLFW_KEY_LEFT && mods == GLFW_MOD_SHIFT){
+			transformer_2.wheel_turn = -20;
+			if (transformer_2.velocity >= 0)
+				transformer_2.direction += 1;
+			else 
+				transformer_2.direction -= 1;
+		}
+		else if(key == GLFW_KEY_LEFT){
 			transformer.wheel_turn = -20;
 			if (transformer.velocity >= 0)
 				transformer.direction += 1;
 			else 
 				transformer.direction -= 1;
 		}
-		if(key == GLFW_KEY_LEFT && action == GLFW_RELEASE)
+		if(key == GLFW_KEY_LEFT && action == GLFW_RELEASE && mods == GLFW_MOD_SHIFT)
+			transformer_2.wheel_turn=0;
+		else if(key == GLFW_KEY_LEFT && action == GLFW_RELEASE)
 			transformer.wheel_turn = 0;
 
 
-		if(key == GLFW_KEY_RIGHT){
+		if(key == GLFW_KEY_RIGHT && mods == GLFW_MOD_SHIFT){
+			transformer_2.wheel_turn = 20;
+			if (transformer_2.velocity >= 0)
+				transformer_2.direction -= 1;
+			else 
+				transformer_2.direction += 1;
+		}
+		else if(key == GLFW_KEY_RIGHT){
 			transformer.wheel_turn = 20;
 			if (transformer.velocity >= 0)
 				transformer.direction -= 1;
 			else
 				transformer.direction += 1;
 		}
-		if(key == GLFW_KEY_RIGHT && action == GLFW_RELEASE)
+		if(key == GLFW_KEY_RIGHT && action == GLFW_RELEASE && mods == GLFW_MOD_SHIFT)
+			transformer_2.wheel_turn=0;
+		else if(key == GLFW_KEY_RIGHT && action == GLFW_RELEASE)
 			transformer.wheel_turn = 0;
 		
 
-		if (key == GLFW_KEY_SPACE && mods == GLFW_MOD_SHIFT){
+
+		if (key == GLFW_KEY_SPACE && mods==(GLFW_MOD_CONTROL | GLFW_MOD_SHIFT)){
+ 			transformer_2.car_mode = true;
+ 			transformer_2.robot_mode = false;
+ 		}
+ 		else if (key == GLFW_KEY_SPACE && mods==GLFW_MOD_CONTROL){
+ 			transformer_2.car_mode = false;
+ 			transformer_2.robot_mode = true;
+ 		}
+		else if (key == GLFW_KEY_SPACE && mods == GLFW_MOD_SHIFT){
  			transformer.car_mode = true;
  			transformer.robot_mode = false;
  		}
@@ -152,6 +186,108 @@ namespace csX75
  				playback();	
  			}
  		}
+
+ 		if (key == GLFW_KEY_Q && mods == (GLFW_MOD_CONTROL | GLFW_MOD_SHIFT))
+ 			transformer_2.face_rotate_y -= 1; 		
+ 		else if (key == GLFW_KEY_Q && mods==GLFW_MOD_SHIFT)
+ 			transformer.face_rotate_y -= 1; 		
+ 		else if (key == GLFW_KEY_Q && mods==GLFW_MOD_CONTROL)
+ 			transformer_2.face_rotate_y += 1;
+ 		else if (key == GLFW_KEY_Q)
+ 			transformer.face_rotate_y += 1;
+
+ 		if (key == GLFW_KEY_W && mods == (GLFW_MOD_CONTROL | GLFW_MOD_SHIFT))
+ 			transformer_2.left_upper_arm_x -= 1; 		
+ 		else if (key == GLFW_KEY_W && mods==GLFW_MOD_SHIFT)
+ 			transformer.left_upper_arm_x -= 1; 		
+ 		else if (key == GLFW_KEY_W && mods==GLFW_MOD_CONTROL)
+ 			transformer_2.left_upper_arm_x += 1;
+ 		else if (key == GLFW_KEY_W)
+ 			transformer.left_upper_arm_x += 1;
+
+ 		if (key == GLFW_KEY_E && mods == (GLFW_MOD_CONTROL | GLFW_MOD_SHIFT))
+ 			transformer_2.left_upper_arm_z -= 1; 		
+ 		else if (key == GLFW_KEY_E && mods==GLFW_MOD_SHIFT)
+ 			transformer.left_upper_arm_z -= 1; 		
+ 		else if (key == GLFW_KEY_E && mods==GLFW_MOD_CONTROL)
+ 			transformer_2.left_upper_arm_z += 1;
+ 		else if (key == GLFW_KEY_E)
+ 			transformer.left_upper_arm_z += 1;
+
+ 		if (key == GLFW_KEY_R && mods == (GLFW_MOD_CONTROL | GLFW_MOD_SHIFT))
+ 			transformer_2.left_lower_arm_z -= 1; 		
+ 		else if (key == GLFW_KEY_R && mods==GLFW_MOD_SHIFT)
+ 			transformer.left_lower_arm_z -= 1; 		
+ 		else if (key == GLFW_KEY_R && mods==GLFW_MOD_CONTROL)
+ 			transformer_2.left_lower_arm_z += 1;
+ 		else if (key == GLFW_KEY_R)
+ 			transformer.left_lower_arm_z += 1;
+
+
+ 		if (key == GLFW_KEY_O && mods == (GLFW_MOD_CONTROL | GLFW_MOD_SHIFT))
+ 			transformer_2.right_upper_arm_x -= 1; 		
+ 		else if (key == GLFW_KEY_O && mods==GLFW_MOD_SHIFT)
+ 			transformer.right_upper_arm_x -= 1; 		
+ 		else if (key == GLFW_KEY_O && mods==GLFW_MOD_CONTROL)
+ 			transformer_2.right_upper_arm_x += 1;
+ 		else if (key == GLFW_KEY_O)
+ 			transformer.right_upper_arm_x += 1;
+
+ 		if (key == GLFW_KEY_P && mods == (GLFW_MOD_CONTROL | GLFW_MOD_SHIFT))
+ 			transformer_2.right_upper_arm_z -= 1; 		
+ 		else if (key == GLFW_KEY_P && mods==GLFW_MOD_SHIFT)
+ 			transformer.right_upper_arm_z -= 1; 		
+ 		else if (key == GLFW_KEY_P && mods==GLFW_MOD_CONTROL)
+ 			transformer_2.right_upper_arm_z += 1;
+ 		else if (key == GLFW_KEY_P)
+ 			transformer.right_upper_arm_z += 1;
+
+ 		if (key == GLFW_KEY_F && mods == (GLFW_MOD_CONTROL | GLFW_MOD_SHIFT))
+ 			transformer_2.right_lower_arm_z -= 1; 		
+ 		else if (key == GLFW_KEY_F && mods==GLFW_MOD_SHIFT)
+ 			transformer.right_lower_arm_z -= 1; 		
+ 		else if (key == GLFW_KEY_F && mods==GLFW_MOD_CONTROL)
+ 			transformer_2.right_lower_arm_z += 1;
+ 		else if (key == GLFW_KEY_F)
+ 			transformer.right_lower_arm_z += 1;
+
+
+ 		if (key == GLFW_KEY_T && mods == (GLFW_MOD_CONTROL | GLFW_MOD_SHIFT))
+ 			transformer_2.position_y -= 0.1; 		
+ 		else if (key == GLFW_KEY_T && mods==GLFW_MOD_SHIFT)
+ 			transformer.position_y-= 0.1; 		
+ 		else if (key == GLFW_KEY_T && mods==GLFW_MOD_CONTROL)
+ 			transformer_2.position_y += 0.1;
+ 		else if (key == GLFW_KEY_T)
+ 			transformer.position_y += 0.1;
+
+
+ 		if (key == GLFW_KEY_Y && mods == (GLFW_MOD_CONTROL | GLFW_MOD_SHIFT))
+ 			globalCameraLX-= 0.1; 		
+ 		else if (key == GLFW_KEY_Y && mods==GLFW_MOD_SHIFT)
+ 			globalCameraX-= 0.1; 		
+ 		else if (key == GLFW_KEY_Y && mods==GLFW_MOD_CONTROL)
+ 			globalCameraLX += 0.1;
+ 		else if (key == GLFW_KEY_Y)
+ 			globalCameraX += 0.1;
+
+ 		if (key == GLFW_KEY_U && mods == (GLFW_MOD_CONTROL | GLFW_MOD_SHIFT))
+ 			globalCameraLY-= 0.1; 		
+ 		else if (key == GLFW_KEY_U && mods==GLFW_MOD_SHIFT)
+ 			globalCameraY-= 0.1; 		
+ 		else if (key == GLFW_KEY_U && mods==GLFW_MOD_CONTROL)
+ 			globalCameraLY += 0.1;
+ 		else if (key == GLFW_KEY_U)
+ 			globalCameraY += 0.1;
+
+ 		if (key == GLFW_KEY_I && mods == (GLFW_MOD_CONTROL | GLFW_MOD_SHIFT))
+ 			globalCameraLZ-= 0.1; 		
+ 		else if (key == GLFW_KEY_I && mods==GLFW_MOD_SHIFT)
+ 			globalCameraZ-= 0.1; 		
+ 		else if (key == GLFW_KEY_I && mods==GLFW_MOD_CONTROL)
+ 			globalCameraLZ += 0.1;
+ 		else if (key == GLFW_KEY_I)
+ 			globalCameraZ += 0.1;
 	}
 };
 

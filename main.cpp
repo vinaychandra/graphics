@@ -94,6 +94,9 @@ void renderGL(void)
 		if (transformer.car_mode)	transformer.toCar();
 		if (transformer.robot_mode) transformer.toRobot();
 
+		if (transformer_2.car_mode)	transformer_2.toCar();
+		if (transformer_2.robot_mode) transformer_2.toRobot();
+		
 		Camera();
 
 		glPushMatrix();
@@ -133,6 +136,7 @@ void write_frame()
 		myfile << " " << transformer.position_x<< " " <<transformer.position_y<< " " <<transformer.position_z<< " " <<transformer.direction<< " " <<transformer.velocity<< " " <<transformer.forward<< " " <<transformer.backward<< " " <<transformer.face_rotate_x<< " " <<transformer.face_rotate_y<< " " <<transformer.face_rotate_z<< " " <<transformer.hood_rotate_x<< " " <<transformer.windshield_full_rotate<< " " <<transformer.windshield_left_door<< " " <<transformer.windshield_right_door<< " " <<transformer.left_shoulder_angle<< " " <<transformer.right_shoulder_angle<< " " <<transformer.left_upper_arm_x<< " " <<transformer.left_upper_arm_y<< " " <<transformer.left_upper_arm_z<< " " <<transformer.right_upper_arm_x<< " " <<transformer.right_upper_arm_y<< " " <<transformer.right_upper_arm_z<< " " <<transformer.left_lower_arm_x<< " " <<transformer.left_lower_arm_y<< " " <<transformer.left_lower_arm_z<< " " <<transformer.right_lower_arm_x<< " " <<transformer.right_lower_arm_y<< " " <<transformer.right_lower_arm_z<< " " <<transformer.leg_translate<< " " <<transformer.left_thigh_angle<< " " <<transformer.right_thigh_angle<< " " <<transformer.left_knee_angle<< " " <<transformer.right_knee_angle<< " " <<transformer.left_foot_angle<< " " <<transformer.right_foot_angle<< " " <<transformer.windshield_move<< " " <<transformer.foot_move<< " " <<transformer.wheel_turn<< " " <<transformer.wheel_rotate<< " " <<transformer.car_mode<< " " <<transformer.robot_mode<< " " <<transformer.extra_movement_translation<< " " <<transformer.extra_movement_rotation <<endl;
 		myfile << " " << transformer_2.position_x<< " " <<transformer_2.position_y<< " " <<transformer_2.position_z<< " " <<transformer_2.direction<< " " <<transformer_2.velocity<< " " <<transformer_2.forward<< " " <<transformer_2.backward<< " " <<transformer_2.face_rotate_x<< " " <<transformer_2.face_rotate_y<< " " <<transformer_2.face_rotate_z<< " " <<transformer_2.hood_rotate_x<< " " <<transformer_2.windshield_full_rotate<< " " <<transformer_2.windshield_left_door<< " " <<transformer_2.windshield_right_door<< " " <<transformer_2.left_shoulder_angle<< " " <<transformer_2.right_shoulder_angle<< " " <<transformer_2.left_upper_arm_x<< " " <<transformer_2.left_upper_arm_y<< " " <<transformer_2.left_upper_arm_z<< " " <<transformer_2.right_upper_arm_x<< " " <<transformer_2.right_upper_arm_y<< " " <<transformer_2.right_upper_arm_z<< " " <<transformer_2.left_lower_arm_x<< " " <<transformer_2.left_lower_arm_y<< " " <<transformer_2.left_lower_arm_z<< " " <<transformer_2.right_lower_arm_x<< " " <<transformer_2.right_lower_arm_y<< " " <<transformer_2.right_lower_arm_z<< " " <<transformer_2.leg_translate<< " " <<transformer_2.left_thigh_angle<< " " <<transformer_2.right_thigh_angle<< " " <<transformer_2.left_knee_angle<< " " <<transformer_2.right_knee_angle<< " " <<transformer_2.left_foot_angle<< " " <<transformer_2.right_foot_angle<< " " <<transformer_2.windshield_move<< " " <<transformer_2.foot_move<< " " <<transformer_2.wheel_turn<< " " <<transformer_2.wheel_rotate<< " " <<transformer_2.car_mode<< " " <<transformer_2.robot_mode<< " " <<transformer_2.extra_movement_translation<< " " <<transformer_2.extra_movement_rotation <<endl;
 		myfile  << " " << globalCameraX << " " << globalCameraY << " " << globalCameraZ << " " << globalCameraLX << " " << globalCameraLY << " " << globalCameraLZ << endl;
+		myfile << CameraMode << " 0"<< endl; //0 means do not interpolate global camera
 		myfile.close();
 	}
 	else cout << "Unable to open file";
@@ -154,9 +158,12 @@ void playback()
 	double tglobalCameraX, tglobalCameraY, tglobalCameraZ;
 	double tglobalCameraLX, tglobalCameraLY, tglobalCameraLZ;
 
+	bool interpolate_cam = false;
+
 	myfile >>  transformer_o_1.position_x>> transformer_o_1.position_y>> transformer_o_1.position_z>> transformer_o_1.direction>> transformer_o_1.velocity>> transformer_o_1.forward>> transformer_o_1.backward>> transformer_o_1.face_rotate_x>> transformer_o_1.face_rotate_y>> transformer_o_1.face_rotate_z>> transformer_o_1.hood_rotate_x>> transformer_o_1.windshield_full_rotate>> transformer_o_1.windshield_left_door>> transformer_o_1.windshield_right_door>> transformer_o_1.left_shoulder_angle>> transformer_o_1.right_shoulder_angle>> transformer_o_1.left_upper_arm_x>> transformer_o_1.left_upper_arm_y>> transformer_o_1.left_upper_arm_z>> transformer_o_1.right_upper_arm_x>> transformer_o_1.right_upper_arm_y>> transformer_o_1.right_upper_arm_z>> transformer_o_1.left_lower_arm_x>> transformer_o_1.left_lower_arm_y>> transformer_o_1.left_lower_arm_z>> transformer_o_1.right_lower_arm_x>> transformer_o_1.right_lower_arm_y>> transformer_o_1.right_lower_arm_z>> transformer_o_1.leg_translate>> transformer_o_1.left_thigh_angle>> transformer_o_1.right_thigh_angle>> transformer_o_1.left_knee_angle>> transformer_o_1.right_knee_angle>> transformer_o_1.left_foot_angle>> transformer_o_1.right_foot_angle>> transformer_o_1.windshield_move>> transformer_o_1.foot_move>> transformer_o_1.wheel_turn>> transformer_o_1.wheel_rotate>> transformer_o_1.car_mode>> transformer_o_1.robot_mode>> transformer_o_1.extra_movement_translation>> transformer_o_1.extra_movement_rotation;
 	myfile >>  transformer_o_2.position_x>> transformer_o_2.position_y>> transformer_o_2.position_z>> transformer_o_2.direction>> transformer_o_2.velocity>> transformer_o_2.forward>> transformer_o_2.backward>> transformer_o_2.face_rotate_x>> transformer_o_2.face_rotate_y>> transformer_o_2.face_rotate_z>> transformer_o_2.hood_rotate_x>> transformer_o_2.windshield_full_rotate>> transformer_o_2.windshield_left_door>> transformer_o_2.windshield_right_door>> transformer_o_2.left_shoulder_angle>> transformer_o_2.right_shoulder_angle>> transformer_o_2.left_upper_arm_x>> transformer_o_2.left_upper_arm_y>> transformer_o_2.left_upper_arm_z>> transformer_o_2.right_upper_arm_x>> transformer_o_2.right_upper_arm_y>> transformer_o_2.right_upper_arm_z>> transformer_o_2.left_lower_arm_x>> transformer_o_2.left_lower_arm_y>> transformer_o_2.left_lower_arm_z>> transformer_o_2.right_lower_arm_x>> transformer_o_2.right_lower_arm_y>> transformer_o_2.right_lower_arm_z>> transformer_o_2.leg_translate>> transformer_o_2.left_thigh_angle>> transformer_o_2.right_thigh_angle>> transformer_o_2.left_knee_angle>> transformer_o_2.right_knee_angle>> transformer_o_2.left_foot_angle>> transformer_o_2.right_foot_angle>> transformer_o_2.windshield_move>> transformer_o_2.foot_move>> transformer_o_2.wheel_turn>> transformer_o_2.wheel_rotate>> transformer_o_2.car_mode>> transformer_o_2.robot_mode>> transformer_o_2.extra_movement_translation>> transformer_o_2.extra_movement_rotation;
 	myfile >> oglobalCameraX >> oglobalCameraY >> oglobalCameraZ >> oglobalCameraLX >> oglobalCameraLY >> oglobalCameraLZ;
+	myfile >> CameraMode >> interpolate_cam;
 
 	while(myfile){
 		//Get the next transformer positions...
@@ -262,13 +269,21 @@ void playback()
 				transformer_2.extra_movement_rotation = transformer_o_2.extra_movement_rotation + (transformer_t_2.extra_movement_rotation - transformer_o_2.extra_movement_rotation)*timer;
 			}
 
-			{
+			if(interpolate_cam){
 				globalCameraX = oglobalCameraX + (tglobalCameraX - oglobalCameraX)*timer;
 				globalCameraY = oglobalCameraY + (tglobalCameraY - oglobalCameraY)*timer;
 				globalCameraZ = oglobalCameraZ + (tglobalCameraZ - oglobalCameraZ)*timer;
 				globalCameraLX = oglobalCameraLX + (tglobalCameraLX - oglobalCameraLX)*timer;
 				globalCameraLY = oglobalCameraLY + (tglobalCameraLY - oglobalCameraLY)*timer;
 				globalCameraLZ = oglobalCameraLZ + (tglobalCameraLZ - oglobalCameraLZ)*timer;
+			}
+			else {
+				globalCameraX = oglobalCameraX;
+				globalCameraY = oglobalCameraY;
+				globalCameraZ = oglobalCameraZ;
+				globalCameraLX = oglobalCameraLX;
+				globalCameraLY = oglobalCameraLY;
+				globalCameraLZ = oglobalCameraLZ;
 			}
 
 			if (glfwWindowShouldClose(window) != 0)
@@ -284,6 +299,7 @@ void playback()
 			glfwPollEvents();
 
 			timer += time_between_snapshots/frames_between_snapshots;
+
 		}
 		transformer_o_1 = transformer_t_1;
 		transformer_o_2 = transformer_t_2;
@@ -294,6 +310,8 @@ void playback()
 		oglobalCameraLX = tglobalCameraLX;
 		oglobalCameraLY = tglobalCameraLY;
 		oglobalCameraLZ = tglobalCameraLZ;
+
+		myfile >> CameraMode >> interpolate_cam;
 
 	}	
 	return;
