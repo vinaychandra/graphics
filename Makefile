@@ -21,3 +21,10 @@ clean:
 	rm -f $(BIN)
 	rm -f *.o
 	rm -f *~
+	rm -rf capture
+	rm -f transformers.avi
+
+video:
+	cd capture; \
+	mogrify -flip -format jpg frame_*.ppm; \
+	mencoder mf://*.jpg -mf w=800:h=600:fps=25:type=jpg -ovc lavc -lavcopts vcodec=mpeg4:mbd=2:trell -oac copy -o ../transformers.avi

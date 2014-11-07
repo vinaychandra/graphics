@@ -11,6 +11,7 @@
 
 void renderGL();
 void routines();
+void capture_frame(unsigned int);
 
 struct_transformer transformer, transformer_2;
 scenery world;
@@ -145,6 +146,8 @@ void write_frame()
 
 void playback()
 {
+	int frame_number = 1;
+
 	ifstream myfile ("keyframes.txt");
 	if (!myfile.is_open()) {
 		cout << "Unable to open file";
@@ -297,6 +300,8 @@ void playback()
 
 			// Poll for and process events
 			glfwPollEvents();
+			capture_frame(frame_number);
+			frame_number++;
 
 			timer += time_between_snapshots/frames_between_snapshots;
 
@@ -315,4 +320,33 @@ void playback()
 
 	}	
 	return;
+}
+
+void capture_frame(unsigned int framenum)
+{
+	unsigned char *pRGB;
+	int SCREEN_WIDTH = 640;
+	int SCREEN_HEIGHT = 640;
+
+	//global pointer float *pRGB
+	pRGB = new unsigned char [3 * (SCREEN_WIDTH+1) * (SCREEN_HEIGHT + 1) ];
+
+
+	// set the framebuffer to read
+	//default for double buffered
+	glReadBuffer(GL_BACK);
+
+	glPixelStoref(GL_PACK_ALIGNMENT,1);//for word allignment
+
+	glReadPixels(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, GL_RGB, GL_UNSIGNED_BYTE, pRGB);
+	char filename[200];
+	sprintf(filename,"capture/frame_%04d.ppm",framenum);
+	std::ofstream out(filename, std::ios::out);
+	out<<"P6"<<std::endl;
+	out<<SCREEN_WIDTH<<" "<<SCREEN_HEIGHT<<" 255"<<std::endl;
+	out.write(reinterpret_cast<char const *>(pRGB), (3 * (SCREEN_WIDTH+1) * (SCREEN_HEIGHT + 1)) * sizeof(int));
+	out.close();
+
+	//function to store pRGB in a file named count
+	delete pRGB;
 }
